@@ -27,6 +27,7 @@
            [0],
            800,
            600))))
+   
    (testing "superminimalist"
      (is
        (= 

@@ -3,6 +3,7 @@
     [common.math.helpers :refer [to-fixed]]
     [geopicasso.config :as config]
     [geopicasso.util :refer [map->ShapeModel, copy, svg]]
+    [geopicasso.helpers :refer [first-and-last-shapes-fn, get-next-shape-fn, projected-shape-fn, create-png!]]
     [hiccup.core :refer [html]]
     [clojure.java.io :refer [file]]
     )
@@ -10,91 +11,42 @@
 
 (def session-config (atom nil))
 
-(defn first-and-last-shapes []
-  (let [
-      little-r (/ 0.5 (:n @session-config))
-    ]
-    [
-     (map->ShapeModel {:cx little-r, :cy 0.5, :r little-r}),
-     (map->ShapeModel {:cx 0.5, :cy 0.5, :r 0.5})
-    ]))
+(def first-and-last-shapes (first-and-last-shapes-fn session-config))
 
-(defn get-next-shape [previous-shape]
-  (let [
-      [first-shape, last-shape] (first-and-last-shapes)
-      make-bigger
-        (>
-          (to-fixed
-            (+ 
-              (:cx previous-shape)
-              (*
-                3
-                (:r previous-shape)))
-            4)
-          (to-fixed
-            (+ 
-              (:cx last-shape)
-              (:r last-shape))
-            4))
-      bigger-r ; val biggerR = (previousShape.r / firstShape.r + 1) * firstShape.r
-        (*
-          (+
-            (/
-              (:r previous-shape)
-              (:r first-shape))
-            1)
-          (:r first-shape))
-    ]
-    (if 
-      make-bigger
-        (copy previous-shape {:cx bigger-r, :r bigger-r})
-      ;else
-        (copy 
-          previous-shape 
-          {
-           :cx 
-             (+
-               (:cx previous-shape)
-               (* 2 (:r previous-shape)))
-          }))))
+(def get-next-shape (get-next-shape-fn first-and-last-shapes))
+
+(def projected-shape (projected-shape-fn session-config))
 
 (defn unit-shapes []
-  (let [
-      [first-shape, last-shape] (first-and-last-shapes)
-    ]
-    (loop [
-        acc nil
-        previous-shape first-shape
+  (do
+    ; (println "@ unit-shapes")
+    (let [
+        [first-shape, last-shape] (first-and-last-shapes)
       ]
-      (let [ 
-          next-shape (get-next-shape previous-shape)
+      (loop [
+          acc nil
+          previous-shape first-shape
         ]
-        (do
-          (if
-            (>
-              (to-fixed (:r next-shape) 4)
-              (to-fixed (:r last-shape) 4))
-            (cons previous-shape acc)
-            ;else
-            (recur (cons previous-shape acc) next-shape)))))))
+        (let [ 
+            next-shape (get-next-shape previous-shape)
+          ]
+          (do
+            (if
+              (>
+                (to-fixed (:r next-shape) 4)
+                (to-fixed (:r last-shape) 4))
+              (cons previous-shape acc)
+              ;else
+              (recur (cons previous-shape acc) next-shape))))))))
 
-(defn projected-shape [shape]
-  (let [
-      config-unit-scale (fn [d] (* d (/ (:r @session-config) 0.5)))
-      config-unit-xmove (fn [d] (+ d (- (:cx @session-config) (config-unit-scale 0.5))))
-      config-unit-ymove (fn [d] (+ d (- (:cy @session-config) (config-unit-scale 0.5))))
-      unit-to-projected-xscale (fn [d] (* d (:x-res @session-config)))
-      unit-to-projected-yscale (fn [d] (* d (:y-res @session-config)))
-      x-transform (comp unit-to-projected-xscale config-unit-xmove config-unit-scale)
-      y-transform (comp unit-to-projected-yscale config-unit-ymove config-unit-scale)
-      r-transform (comp unit-to-projected-xscale config-unit-scale)
-    ]
-    (copy shape 
-      {
-       :cx (x-transform (:cx shape))
-       :cy (y-transform (:cy shape))
-       :r (r-transform (:r shape))
-      })))
+(defn fills []
+  (cycle (:fills @session-config)))
+
+(defn strokes []
+  (cycle (:strokes @session-config)))
+
+(defn shapes []
+  (cycle (:shapes @session-config)))
 
 (defn ready-svg-doc [dynamic-content]
   (html
@@ -110,40 +62,57 @@
           :y 0
           :width (:x-res @session-config)
           :height (:y-res @session-config)
-          :fill "black"
+          :fill (:bg @session-config)
         }]
       dynamic-content
       ]))
 
 (defn ready-shapes []
   (map
-    (fn [shape]
-      (->
-        ; shape
+    (fn [shape, fill-data, stroke-data]
+      (svg 
         (projected-shape shape)
-        (svg @session-config)
-        ; 7
-      ))
-    (unit-shapes)))
+        fill-data
+        stroke-data
+        @session-config))
+    (unit-shapes), (fills), (strokes)))
 
-(defn spit-svg []
+
+(defn spit-svg [svg-doc]
   (do
-    (println "@ spit-svg")
+    ; (println "@ spit-svg")
     (spit
       (str "./renders/" (:id @session-config) ".svg")
       ; (file (str "./rendered/" (:id @session-config) ".svg"))
-      (ready-svg-doc (ready-shapes)))))
+      svg-doc)))
+      ; (ready-svg-doc (ready-shapes)))))
 
+(defn spit-png [svg-doc]
+  (create-png! svg-doc (:id @session-config)))
+
+(defn create-svg-doc []
+  (ready-svg-doc (ready-shapes)))
 
 (defn go []
-  (spit-svg))
+  (time
+    (let [
+        svg-doc (create-svg-doc)
+      ]
+      (do
+        (spit-svg svg-doc)
+        (spit-png svg-doc)))))
+
+(defn set-session [path]
+  (reset! 
+    session-config 
+    (config/from path)))
+
 
 (defn -main
   [& args]
   (do
     ; (println args)
-    (reset! 
-      session-config 
-      (config/from (first args)))
+    (set-session (first args))
       ; (config/from "deathstartest.edn"))
-    (go)))
+    (go)
+    ))

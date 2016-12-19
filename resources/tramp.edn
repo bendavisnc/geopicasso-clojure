@@ -4,16 +4,17 @@
   "r" 4.0,
   ;"n" 1000,
   "n" 3500,
+  ;"n" 35000, ; not accomplished
   ;"n" 30,
   "bg" "white",
 
   "fills" [
-	{"color" "#FF69B4", "opacity" 0.5},
-	{"color" "#00FFFF", "opacity" 0.5},
+    {"color" "#FF69B4", "opacity" 0.5},
+    {"color" "#00FFFF", "opacity" 0.5},
   ]
 
   "strokes" [
-	{"color" "#ffffff", "opacity" 0.0},
+    {"color" "#ffffff", "opacity" 0.0},
   ]
 
   "res" {

@@ -26,7 +26,7 @@
       :n 1000,
       :bg "rgb(0, 0, 0)",
       :fills [{:color "black", :opacity 0.0}],
-      :strokes [{:color "black", :opacity 1.0, :width 1.0}],
+      :strokes [{:color "white", :opacity 1.0, :width 1.0}],
       :shapes [0],
       :x-res 1600,
       :y-res 1200
