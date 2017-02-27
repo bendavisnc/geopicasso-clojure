@@ -1,0 +1,26 @@
+{
+  "cx" -3.2,
+  "cy" 0.5,
+  "r" 4.0,
+  ; "r" 8.0,
+  ;"n" 1000,
+  ; "n" 3500,
+  "n" 5000,
+  ; "n" 10000,
+  ;"n" 30,
+  "bg" "white",
+
+
+  "fills" [
+    {"color" "purple", "opacity" 0.0}
+  ]
+
+  "strokes" [
+    {"color" "black", "opacity" 0.5, "width" 0.3},
+  ]
+
+  "res" {
+    "x" 1600,
+    "y" 1200
+  }
+}

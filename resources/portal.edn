@@ -16,6 +16,7 @@
     ; {"color" "purple", "opacity" 0.5}
     {"color" "black", "opacity" 0.5}
     {"color" "white", "opacity" 0.5}
+    {"color" "white", "opacity" 0.5}
   ]
 
   "strokes" [

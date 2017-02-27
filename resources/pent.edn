@@ -1,0 +1,21 @@
+{
+
+  "bg" "black"
+
+  "n" 3500
+
+  "r" 0.3
+
+  "strokes" [
+    ;{"color" "#FFFF0F", "opacity" 0.05, "width" 0.008},
+    {"color" "blue", "opacity" 0.05, "width" 0.008},
+    {"color" "white", "opacity" 0.3,  "width" 0.002},
+    {"color" "pink", "opacity" 0.3,  "width" 0.002}]
+  "shapes" [5, 0, 3]
+
+  "res" {
+    "x" 1600,
+    "y" 1200
+  }
+
+}

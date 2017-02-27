@@ -1,6 +1,5 @@
 (ns geopicasso.config
   (:require [clojure.data.json :as json])
-  (:gen-class)
   )
 
 (defrecord Config [

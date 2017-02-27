@@ -1,0 +1,22 @@
+{
+  "cx" 0.5,
+  "cy" 0.5,
+  "n" 1000,
+  "bg" "black",
+
+  "fills" [
+    {"color" "black", "opacity" 0.8},
+    {"color" "red", "opacity" 0.7},
+  ]
+
+  "strokes" [
+    {"color" "#ffffff", "opacity" 0.0},
+  ]
+
+  "shapes" [6],
+
+  "res" {
+    "x" 1600,
+    "y" 1200
+  }
+}

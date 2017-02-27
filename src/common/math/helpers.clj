@@ -29,26 +29,34 @@
         theta (to-radians degrees)
         [x, y] coord
       ]
-      (mapv
-        #(to-fixed % 4)
-        [
-          (+
-            (* x (Math/cos theta))
-            (* y (Math/sin theta))),
-          (+
-            (* x (Math/sin theta) -1)
-            (* y (Math/cos theta)))]))))
+      [
+        (+
+          (* x (Math/cos theta))
+          (* y (Math/sin theta))),
+        (+
+          (* x (Math/sin theta) -1)
+          (* y (Math/cos theta)))])))
 
 (def apply-translation
   (fn [coord, dx, dy]
     (let [
         [x, y] coord
       ]
-      (mapv
-        #(to-fixed % 4)
-        [
-          (+ x dx)
-          (+ y dy)]))))
+      [
+        (+ x dx)
+        (+ y dy)])))
+
+(def apply-scale
+  (fn [coord, s]
+    (mapv
+      #(* % s)
+      coord
+      )))
+
+(def diff
+  (fn [[x1, y1], [x2, y2]]
+    [(- x1 x2), (- y1 y2)]))
+
 
 
 (def perform-rotation

@@ -1,7 +1,7 @@
 (ns geopicasso.helpers
 	(:require
     [common.math.helpers :refer [to-fixed]]
-    [geopicasso.util :refer [map->ShapeModel, copy, svg]]
+    [geopicasso.util.util :refer [map->ShapeModel, copy, svg]]
     [hiccup.core :refer [html]]
     )
 	(:import
@@ -16,11 +16,11 @@
 			; (println "@ projected-shape-fn")
 			; (println config)
 		  (let [
-		      config-unit-scale (fn [d] (* d (/ (:r @config) 0.5)))
-		      config-unit-xmove (fn [d] (+ d (- (:cx @config) (config-unit-scale 0.5))))
-		      config-unit-ymove (fn [d] (+ d (- (:cy @config) (config-unit-scale 0.5))))
-		      unit-to-projected-xscale (fn [d] (* d (:x-res @config)))
-		      unit-to-projected-yscale (fn [d] (* d (:y-res @config)))
+		      config-unit-scale (fn [d] (* d (/ (:r config) 0.5)))
+		      config-unit-xmove (fn [d] (+ d (- (:cx config) (config-unit-scale 0.5))))
+		      config-unit-ymove (fn [d] (+ d (- (:cy config) (config-unit-scale 0.5))))
+		      unit-to-projected-xscale (fn [d] (* d (:x-res config)))
+		      unit-to-projected-yscale (fn [d] (* d (:y-res config)))
 		      x-transform (comp unit-to-projected-xscale config-unit-xmove config-unit-scale)
 		      y-transform (comp unit-to-projected-yscale config-unit-ymove config-unit-scale)
 		      r-transform (comp unit-to-projected-xscale config-unit-scale)
@@ -38,7 +38,7 @@
 			; (println "@ first-and-last-shapes-fn")
 			; (println config)
 		  (let [
-		      little-r (/ 0.5 (:n @config))
+		      little-r (/ 0.5 (:n config))
 		      ; little-r (/ 0.5 3)
 		    ]
 		    [
@@ -85,28 +85,5 @@
 	               (:cx previous-shape)
 	               (* 2 (:r previous-shape)))
 	          })))))
-
-
-(defn create-png! [svg-doc, docname]
-	(let [
-      png-converter 
-	      (org.apache.batik.transcoder.image.PNGTranscoder.)
-	    svg-input 
-	      (org.apache.batik.transcoder.TranscoderInput. 
-	      	(java.io.ByteArrayInputStream. (.getBytes (str svg-doc))))
-	    svg-out-file 
-      	(java.io.FileOutputStream. (str "renders/" docname ".png"))
-      svg-out (org.apache.batik.transcoder.TranscoderOutput. svg-out-file)
-    ]
-    (do
-    	(.transcode png-converter svg-input svg-out)
-      (.flush svg-out-file)
-      (.close svg-out-file))))
-
-
-
-
-
-
 
 
