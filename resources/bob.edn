@@ -1,0 +1,27 @@
+{
+  "cx" -3.2,
+  "cy" 0.5,
+  "r" 4.0,
+  "n" 3500,
+  ; "bg" "white",
+  "bg" "#f4f4f4",
+
+  "fills" [
+    {"color" "white", "opacity" 0.5},
+    {"color" "white", "opacity" 0.5},
+    {"color" "white", "opacity" 0.5},
+    ; {"color" "purple", "opacity" 0.5},
+    {"color" "purple", "opacity" 0.5},
+    {"color" "blue", "opacity" 0.5},
+    {"color" "white", "opacity" 0.5},
+  ]
+
+  "strokes" [
+    {"color" "#ffffff", "opacity" 0.0},
+  ]
+
+  "res" {
+    "x" 1600,
+    "y" 1200
+  }
+}

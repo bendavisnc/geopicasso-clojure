@@ -8,13 +8,13 @@
   "bg" "black",
 
   "fills" [
-	{"color" "#ff00ff", "opacity" 0.5},
-	{"color" "#0000ff", "opacity" 0.5},
-	{"color" "#ffa500", "opacity" 0.5}
+    {"color" "#ff00ff", "opacity" 0.5},
+    {"color" "#0000ff", "opacity" 0.5},
+    {"color" "#ffa500", "opacity" 0.5}
   ]
 
   "strokes" [
-	{"color" "#ffffff", "opacity" 0.0},
+    {"color" "#ffffff", "opacity" 0.0},
   ]
 
   "res" {

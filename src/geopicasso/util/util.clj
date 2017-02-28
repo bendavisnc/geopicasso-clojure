@@ -18,7 +18,7 @@
     (merge shapemodel argm)))
 
 (defmulti svg
-  (fn [shapemodel, fill-data, stroke-data, sides-count]
+  (fn [id, shapemodel, fill-data, stroke-data, sides-count]
     (cond
       ; true
         ; :debug
@@ -34,12 +34,13 @@
         (throw (Exception. (str "Unsupported svg conversion operation."))))))
 
 
-(defmethod svg :circle [shapemodel, fill-data, stroke-data, _]
+(defmethod svg :circle [id, shapemodel, fill-data, stroke-data, _]
   (let [
       precision-amt 4
     ]
     [:circle
       {
+       :id id      
        :cx (to-fixed (:cx shapemodel) precision-amt)
        :cy (to-fixed (:cy shapemodel) precision-amt)
        :r (to-fixed (:r shapemodel) precision-amt)
@@ -51,12 +52,13 @@
       }]
    ))
 
-(defmethod svg :polygon [shapemodel, fill-data, stroke-data, sides-count]
+(defmethod svg :polygon [id, shapemodel, fill-data, stroke-data, sides-count]
   (let [
       precision-amt 4
     ]
     [:polygon
       {
+       :id id      
        :points (points shapemodel, sides-count)
        :fill (:color fill-data)
        :fill-opacity (:opacity fill-data)

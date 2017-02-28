@@ -1,36 +1,20 @@
-# geopicasso
+# Geopicasso
+## A sort of art project based on a continuous drawing of circles or polygons.
+### This is something I've written and rewritten a few times when trying to learn a new language or library.
+### Based on: http://www.sievesofchaos.com/
 
-FIXME: description
 
-## Installation
 
-Download from http://example.com/FIXME.
+### few example renders:
 
-## Usage
+[ex1]: renders/lady.png
+![example 1][ex1]
 
-FIXME: explanation
+[ex2]: renders/pent.png
+![example 2][ex2]
 
-    $ java -jar geopicasso-0.1.0-standalone.jar [args]
+[ex3]: renders/mermaid.png
+![example 3][ex3]
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+[ex4]: renders/spiderwebs.png
+![example 4][ex4]

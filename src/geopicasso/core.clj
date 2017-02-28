@@ -10,16 +10,22 @@
     )
   (:gen-class))
 
-(def session-config (atom nil))
+
+;;
+;; 
+;; A sort of art project based on a continuous drawing of circles or polygons.
+;; Based on: http://www.sievesofchaos.com/
+
+; the contemporary config object that holds all of the data for the render to happen.
+(def ^:dynamic session-config nil) 
 
 (defn first-and-last-shapes [] 
-  ((first-and-last-shapes-fn @session-config)))
+  ((first-and-last-shapes-fn session-config)))
 
 (def get-next-shape (get-next-shape-fn first-and-last-shapes))
 
-; (def projected-shape (projected-shape-fn @session-config))
 (defn projected-shape [shape] 
-  ((projected-shape-fn @session-config) shape))
+  ((projected-shape-fn session-config) shape))
 
 (defn unit-shapes []
   (let [
@@ -37,56 +43,60 @@
             (>
               (to-fixed (:r next-shape) 4)
               (to-fixed (:r last-shape) 4))
-            (cons previous-shape acc)
+            ; (cons previous-shape acc)
+            (reverse (cons previous-shape acc))
             ;else
             (recur (cons previous-shape acc) next-shape)))))))
 
 (defn fills []
-  (cycle (:fills @session-config)))
+  (cycle (:fills session-config)))
 
 (defn strokes []
-  (cycle (:strokes @session-config)))
+  (cycle (:strokes session-config)))
 
 (defn shapes []
-  (cycle (:shapes @session-config)))
+  (cycle (:shapes session-config)))
 
 (defn ready-svg-doc [dynamic-content]
   (html
     [:svg
       {
         :xmlns "http://www.w3.org/2000/svg"
-        :width (:x-res @session-config)
-        :height (:y-res @session-config)
+        :width (:x-res session-config)
+        :height (:y-res session-config)
       }
       [:rect
         {
           :x 0
           :y 0
-          :width (:x-res @session-config)
-          :height (:y-res @session-config)
-          :fill (:bg @session-config)
+          :width (:x-res session-config)
+          :height (:y-res session-config)
+          :fill (:bg session-config)
         }]
       dynamic-content
       ]))
 
 (defn ready-shapes []
-  (map
-    (fn [shape, fill-data, stroke-data, shape-ind]
-      (svg 
-        (projected-shape shape),
-        fill-data,
-        stroke-data,
-        shape-ind))
-    (unit-shapes), (fills), (strokes), (shapes)))
+  (let [raw-shapemodels (unit-shapes)]
+    (reverse
+      (map
+        (fn [i, shape, fill-data, stroke-data, shape-ind]
+          (svg 
+            (str "element" i)
+            (projected-shape shape),
+            fill-data,
+            stroke-data,
+            shape-ind))
+        (range 0, (count raw-shapemodels)), raw-shapemodels, (fills), (strokes), (shapes)))))
 
 
 (defn spit-svg [svg-doc]
   (spit
-    (str "./renders/" (:id @session-config) ".svg")
+    (str "./renders/" (:id session-config) ".svg")
     svg-doc))
 
 (defn spit-png [svg-doc]
-  (create-png! svg-doc (:id @session-config)))
+  (create-png! svg-doc (:id session-config)))
 
 (defn create-svg-doc []
   (ready-svg-doc (ready-shapes)))
@@ -100,15 +110,8 @@
         (spit-svg svg-doc)
         (spit-png svg-doc)))))
 
-(defn set-session [path]
-  (reset! 
-    session-config 
-    (config/from path)))
-
-
 (defn -main
   [& args]
-  (do
-    (set-session (first args))
+  (binding [session-config (config/from (first args))]
     (go)
     ))

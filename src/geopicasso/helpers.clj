@@ -11,40 +11,35 @@
  )
 
 (defn projected-shape-fn [config]
+	"Creates a function that transforms a shape model from a unit space to a space defined by config parameters."
 	(fn [shape]
-		(do
-			; (println "@ projected-shape-fn")
-			; (println config)
-		  (let [
-		      config-unit-scale (fn [d] (* d (/ (:r config) 0.5)))
-		      config-unit-xmove (fn [d] (+ d (- (:cx config) (config-unit-scale 0.5))))
-		      config-unit-ymove (fn [d] (+ d (- (:cy config) (config-unit-scale 0.5))))
-		      unit-to-projected-xscale (fn [d] (* d (:x-res config)))
-		      unit-to-projected-yscale (fn [d] (* d (:y-res config)))
-		      x-transform (comp unit-to-projected-xscale config-unit-xmove config-unit-scale)
-		      y-transform (comp unit-to-projected-yscale config-unit-ymove config-unit-scale)
-		      r-transform (comp unit-to-projected-xscale config-unit-scale)
-		    ]
-		    (copy shape 
-		      {
-		       :cx (x-transform (:cx shape))
-		       :cy (y-transform (:cy shape))
-		       :r (r-transform (:r shape))
-		      })))))
+	  (let [
+	      config-unit-scale (fn [d] (* d (/ (:r config) 0.5)))
+	      config-unit-xmove (fn [d] (+ d (- (:cx config) (config-unit-scale 0.5))))
+	      config-unit-ymove (fn [d] (+ d (- (:cy config) (config-unit-scale 0.5))))
+	      unit-to-projected-xscale (fn [d] (* d (:x-res config)))
+	      unit-to-projected-yscale (fn [d] (* d (:y-res config)))
+	      x-transform (comp unit-to-projected-xscale config-unit-xmove config-unit-scale)
+	      y-transform (comp unit-to-projected-yscale config-unit-ymove config-unit-scale)
+	      r-transform (comp unit-to-projected-xscale config-unit-scale)
+	    ]
+	    (copy shape 
+	      {
+	       :cx (x-transform (:cx shape))
+	       :cy (y-transform (:cy shape))
+	       :r (r-transform (:r shape))
+	      }))))
 
 (defn first-and-last-shapes-fn [config]
 	(fn []
-		(do
-			; (println "@ first-and-last-shapes-fn")
-			; (println config)
-		  (let [
-		      little-r (/ 0.5 (:n config))
-		      ; little-r (/ 0.5 3)
-		    ]
-		    [
-		     (map->ShapeModel {:cx little-r, :cy 0.5, :r little-r}),
-		     (map->ShapeModel {:cx 0.5, :cy 0.5, :r 0.5})
-		    ]))))
+	  (let [
+	      little-r (/ 0.5 (:n config))
+	      ; little-r (/ 0.5 3)
+	    ]
+	    [
+	     (map->ShapeModel {:cx little-r, :cy 0.5, :r little-r}),
+	     (map->ShapeModel {:cx 0.5, :cy 0.5, :r 0.5})
+	    ])))
 
 (defn get-next-shape-fn [get-first-and-last-shapes] 
   (fn [previous-shape]

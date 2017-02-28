@@ -5,7 +5,13 @@
   )
 
 
+;;
+;;
+;; A ns for generating polygon points (for an svg polygon element)
+
+
 (defn unit-polygon-points [n]
+  "Given a number of sides ind n, return a list of points that represent a polygon."
   (let [
       first-point [0.5, 0]
       theta (/ 360.0 n)
@@ -21,6 +27,7 @@
           (recur (cons (next-point (first points)) points))))))
 
 (defn points-serialized [points]
+  "Given a list of points, return a string in the format for the svg polygon points attribute value."
   (clojure.string/join
     " "
     (map
@@ -30,6 +37,7 @@
 
 
 (defn points [shapemodel, sides-ind]
+  "Return a string that represents the points for a polygon corresponding to the shapemodel and side ind." 
   (let [
       scale-amt (/ (:r shapemodel) 0.5)
       [dx, dy] 
