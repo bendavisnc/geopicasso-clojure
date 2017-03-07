@@ -19,13 +19,13 @@
 ; the contemporary config object that holds all of the data for the render to happen.
 (def ^:dynamic session-config nil) 
 
-(defn first-and-last-shapes [] 
-  ((first-and-last-shapes-fn session-config)))
+(def first-and-last-shapes 
+  (first-and-last-shapes-fn session-config))
 
 (def get-next-shape (get-next-shape-fn first-and-last-shapes))
 
-(defn projected-shape [shape] 
-  ((projected-shape-fn session-config) shape))
+(def projected-shape 
+  (projected-shape-fn session-config))
 
 (defn unit-shapes []
   (let [
@@ -39,11 +39,10 @@
           next-shape (get-next-shape previous-shape)
         ]
         (do
-          (if
-            (>
+          (if 
+            (> ; at the last (biggest) circle?
               (to-fixed (:r next-shape) 4)
               (to-fixed (:r last-shape) 4))
-            ; (cons previous-shape acc)
             (reverse (cons previous-shape acc))
             ;else
             (recur (cons previous-shape acc) next-shape)))))))
