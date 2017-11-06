@@ -1,13 +1,6 @@
-{
-  "cx" 0.5,
-  "cy" 0.5,
-  "n" 1000,
-  "bg" "black",
-
-  "strokes" [{"color" "white", "opacity" 1.0, "width" 0.2}]
-
-  "res" {
-    "x" 1600,
-    "y" 1200
-  }
-}
+{:cx 0.5,
+ :cy 0.5,
+ :n 1000,
+ :bg "black",
+ :strokes [{:color "white", :opacity 1.0, :width 0.2}],
+ :res {:x 1600, :y 1200}}

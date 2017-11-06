@@ -6,8 +6,8 @@
     [geopicasso.helpers :refer [first-and-last-shapes-fn, get-next-shape-fn, projected-shape-fn]]
     [hiccup.core :refer [html]]
     [clojure.java.io :refer [file]]
-    [geopicasso.settings :as settings]
-    )
+    [geopicasso.settings :as settings])
+
   (:gen-class))
 
 
@@ -29,15 +29,15 @@
 
 (defn unit-shapes []
   (let [
-      [first-shape, last-shape] (first-and-last-shapes)
-    ]
+        [first-shape, last-shape] (first-and-last-shapes)]
+
     (loop [
-        acc nil
-        previous-shape first-shape
-      ]
+           acc nil
+           previous-shape first-shape]
+
       (let [ 
-          next-shape (get-next-shape previous-shape)
-        ]
+            next-shape (get-next-shape previous-shape)]
+
         (do
           (if 
             (> ; at the last (biggest) circle?
@@ -62,18 +62,18 @@
       {
         :xmlns "http://www.w3.org/2000/svg"
         :width (:x-res session-config)
-        :height (:y-res session-config)
-      }
+        :height (:y-res session-config)}
+
       [:rect
         {
           :x 0
           :y 0
           :width (:x-res session-config)
           :height (:y-res session-config)
-          :fill (:bg session-config)
-        }]
-      dynamic-content
-      ]))
+          :fill (:bg session-config)}]
+
+      dynamic-content]))
+
 
 (defn ready-shapes []
   (let [raw-shapemodels (unit-shapes)]
@@ -103,8 +103,8 @@
 (defn go []
   (time
     (let [
-        svg-doc (create-svg-doc)
-      ]
+          svg-doc (create-svg-doc)]
+
       (do
         (spit-svg svg-doc)
         (spit-png svg-doc)))))
@@ -112,5 +112,5 @@
 (defn -main
   [& args]
   (binding [session-config (config/from (first args))]
-    (go)
-    ))
+    (go)))
+
