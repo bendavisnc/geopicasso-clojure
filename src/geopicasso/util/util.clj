@@ -4,9 +4,9 @@
     [hiccup.core :refer [html]]
     [geopicasso.util.polygon :refer [points]]
     [geopicasso.settings :as settings]
-    [clojure.java.shell :as shell]
-    )
- )
+    [clojure.java.shell :as shell]))
+
+
 
 (defrecord ShapeModel [cx, cy, r])
 
@@ -25,19 +25,19 @@
       (and
         (instance? geopicasso.util.util.ShapeModel shapemodel)
         (= sides-count 0))
-        :circle
+      :circle
       (and
         (instance? geopicasso.util.util.ShapeModel shapemodel)
         (> sides-count 0))
-        :polygon
+      :polygon
       :else
         (throw (Exception. (str "Unsupported svg conversion operation."))))))
 
 
 (defmethod svg :circle [id, shapemodel, fill-data, stroke-data, _]
   (let [
-      precision-amt 4
-    ]
+        precision-amt 4]
+
     [:circle
       {
        :id id      
@@ -48,14 +48,14 @@
        :fill-opacity (:opacity fill-data)
        :stroke (:color stroke-data)
        :stroke-opacity (:opacity stroke-data)
-       :stroke-width (:width stroke-data)
-      }]
-   ))
+       :stroke-width (:width stroke-data)}]))
+
+
 
 (defmethod svg :polygon [id, shapemodel, fill-data, stroke-data, sides-count]
   (let [
-      precision-amt 4
-    ]
+        precision-amt 4]
+
     [:polygon
       {
        :id id      
@@ -64,8 +64,8 @@
        :fill-opacity (:opacity fill-data)
        :stroke (:color stroke-data)
        :stroke-opacity (:opacity stroke-data)
-       :stroke-width (:width stroke-data)
-      }]))
+       :stroke-width (:width stroke-data)}]))
+
 
 (defmulti create-png! 
   (fn [svg-doc, docname]
@@ -76,15 +76,15 @@
 
 (defmethod  create-png! :batik [svg-doc, docname]
   (let [
-      png-converter 
+        png-converter
         (org.apache.batik.transcoder.image.PNGTranscoder.)
-      svg-input 
+        svg-input
         (org.apache.batik.transcoder.TranscoderInput. 
           (java.io.ByteArrayInputStream. (.getBytes (str svg-doc))))
-      svg-out-file 
+        svg-out-file
         (java.io.FileOutputStream. (str "renders/" docname ".png"))
-      svg-out (org.apache.batik.transcoder.TranscoderOutput. svg-out-file)
-    ]
+        svg-out (org.apache.batik.transcoder.TranscoderOutput. svg-out-file)]
+
     (do
       (.transcode png-converter svg-input svg-out)
       (.flush svg-out-file)
@@ -96,12 +96,12 @@
       ; (spit temp-svg-file svg-doc)
       ; (shell/sh "rsvg" (.getAbsolutePath temp-svg-file) (str "renders/" docname ".png")))))
   (let [
-      temp-svg-file (java.io.File/createTempFile docname ".svg")
-    ]
+        temp-svg-file (java.io.File/createTempFile docname ".svg")]
+
     (do
       (spit temp-svg-file svg-doc)
       (shell/sh "rsvg" (.getAbsolutePath temp-svg-file) (str "renders/" docname ".png"))
-      (shutdown-agents)
-      )))
+      (shutdown-agents))))
+
 
 
