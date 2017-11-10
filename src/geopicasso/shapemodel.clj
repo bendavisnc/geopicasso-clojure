@@ -1,0 +1,1 @@
+(ns geopicasso.shapemodel)
