@@ -1,8 +1,7 @@
 (ns geopicasso.config-test
   (:require [clojure.test :refer :all]
             [geopicasso.config]
-            [geopicasso.config :refer [map->Config, default-config, from, with-fallback]])
-
+            [geopicasso.config :refer [map->Config, default-config, from]])
   (:import [geopicasso.config Config]))
 
 
@@ -11,7 +10,7 @@
    (testing "minimalist"
      (is
        (= 
-         (from "minimalist.json")
+         (from "minimalist.edn")
          (Config.
            "minimalist",
            0.5,
@@ -31,19 +30,9 @@
    (testing "superminimalist"
      (is
        (= 
-         (from "superminimalist.json")
+         (from "superminimalist.edn")
          (map->Config
            (assoc
              default-config
-             :id "superminimalist")))))
-   (testing "edn vs json 1"
-     (is
-       (= 
-         (from "minimalist.json")
-         (from "minimalist.edn"))))
-   (testing "edn vs json 2"
-     (is
-       (= 
-         (from "superminimalist.json")
-         (from "superminimalist.edn")))))
+             :id "superminimalist"))))))
 

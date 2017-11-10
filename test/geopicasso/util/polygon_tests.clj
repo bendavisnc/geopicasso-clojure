@@ -17,7 +17,7 @@
     all))
 
 
-(deftest all-tests
+(deftest polygon-tests
 
   (testing "unit-polygon-points"
    (is

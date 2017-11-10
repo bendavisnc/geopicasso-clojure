@@ -2,20 +2,20 @@
 
 (def to-fixed
   (fn [n, p]
-  	(let [
-  		  k 
-	      	(Math/pow 10 p)
-        mult 
+    (let [
+          k
+          (Math/pow 10 p)
+          mult
           (* n k)
-        rounded
+          rounded
           (Math/round mult)
-        divided
-          (/ rounded k)
-      ]
+          divided
+          (/ rounded k)]
+
       divided)))
 
-  	; (Math/round
-	  	; (* n (Math/pow 10 p))
+    ; (Math/round
+      ; (* n (Math/pow 10 p))
 
 (def to-radians
   (fn [degrees]
@@ -26,9 +26,9 @@
 (def apply-rotation
   (fn [coord, degrees]
     (let [
-        theta (to-radians degrees)
-        [x, y] coord
-      ]
+          theta (to-radians degrees)
+          [x, y] coord]
+
       [
         (+
           (* x (Math/cos theta))
@@ -40,8 +40,8 @@
 (def apply-translation
   (fn [coord, dx, dy]
     (let [
-        [x, y] coord
-      ]
+          [x, y] coord]
+
       [
         (+ x dx)
         (+ y dy)])))
@@ -50,8 +50,8 @@
   (fn [coord, s]
     (mapv
       #(* % s)
-      coord
-      )))
+      coord)))
+
 
 (def diff
   (fn [[x1, y1], [x2, y2]]
@@ -62,8 +62,8 @@
 (def perform-rotation
   (fn [coord, degrees, pivot-coord]
     (let [
-        [dx, dy] pivot-coord
-      ]
+          [dx, dy] pivot-coord]
+
       ( 
         (comp
           #(apply-translation % dx dy)
