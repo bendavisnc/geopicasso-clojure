@@ -1,23 +1,8 @@
-{
-  "cx" 0.5,
-
-  "cy" 0.5,
-
-  "r" 0.8,
-
-  ;"n" 4,
-  "n" 8,
-
-  "bg" "green",
-
-  "fills" [
-    {"color" "black", "opacity" 0.0},
-  ],
-
-  "shapes" [0, 3, 4]
-
-  "res" {
-    "x" 800,
-    "y" 600
-  }
-}
+{:cx 0.5,
+ :cy 0.5,
+ :r 0.8,
+ :n 8,
+ :bg "green",
+ :fills [{:color "black", :opacity 0.0}],
+ :shapes [0 3 4],
+ :res {:x 800, :y 600}}

@@ -1,24 +1,12 @@
-{
-  "cx" -3.2,
-  "cy" 0.5,
-  "r" 4.0,
-  "n" 3500,
-  ; "bg" "black",
-  "bg" "white",
-
-  "fills" [
-    {"color" "#faf2ff", "opacity" 0.5},
-    {"color" "#f9e02b", "opacity" 0.5},
-    {"color" "#ce5409", "opacity" 0.5},
-    {"color" "#662708", "opacity" 0.5}
-  ]
-
-  "strokes" [
-    {"color" "#ffffff", "opacity" 0.0},
-  ]
-
-  "res" {
-    "x" 1600,
-    "y" 1200
-  }
-}
+{:cx -3.2,
+ :cy 0.5,
+ :r 4.0,
+ :n 3500,
+ :bg "white",
+ :fills
+ [{:color "#faf2ff", :opacity 0.5}
+  {:color "#f9e02b", :opacity 0.5}
+  {:color "#ce5409", :opacity 0.5}
+  {:color "#662708", :opacity 0.5}],
+ :strokes [{:color "#ffffff", :opacity 0.0}],
+ :res {:x 1600, :y 1200}}

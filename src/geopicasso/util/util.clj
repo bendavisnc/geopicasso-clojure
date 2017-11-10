@@ -11,7 +11,7 @@
 (defrecord ShapeModel [cx, cy, r])
 
 (defn create-shapemodel [cx, cy, r]
-  (ShapeModel. cx, cy, r))
+  (new ShapeModel cx, cy, r))
 
 (defn copy [shapemodel, argm]
   (map->ShapeModel

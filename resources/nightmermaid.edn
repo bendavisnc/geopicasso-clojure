@@ -1,26 +1,9 @@
-{
-  "cx" -3.2,
-  "cy" 0.5,
-  "r" 4.0,
-  "n" 3500,
-  
-  "bg" "black",
-
-  "fills" [
-    {"color" "aqua", "opacity" 0.7}
-    {"color" "black", "opacity" 0.7}
-  ]
-
-  "strokes" [
-    {"color" "#ffffff", "opacity" 0.0},
-  ]
-
-  "shapes" [6],
-  ; "shapes" [3, 6],
-  ; "shapes" [3],
-
-  "res" {
-    "x" 1600,
-    "y" 1200
-  }
-}
+{:r 4.0,
+ :n 3500,
+ :cx -3.2,
+ :cy 0.5,
+ :strokes [{:color "#ffffff", :opacity 0.0}],
+ :res {:x 1600, :y 1200},
+ :bg "black",
+ :fills [{:color "aqua", :opacity 0.7} {:color "black", :opacity 0.7}],
+ :shapes [6]}

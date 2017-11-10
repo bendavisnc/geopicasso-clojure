@@ -1,21 +1,10 @@
-{
-  "cx" -3.2,
-  "cy" 0.5,
-  "r" 14.0,
-  ;"n" 1000,
-  "n" 3500,
-  ;"n" 30,
-  "bg" "black",
-
-  "strokes" [
-	{"color" "#ff00ff", "opacity" 0.5, "width" 1.2},
-	;{"color" "#0000ff", "opacity" 0.5, "width" 0.2},
-	{"color" "#0000ff", "opacity" 0.5, "width" 1.2},
-	{"color" "#ffa500", "opacity" 0.5, "width" 1.2}
-  ]
-
-  "res" {
-    "x" 1600,
-    "y" 1200
-  }
-}
+{:cx -3.2,
+ :cy 0.5,
+ :r 14.0,
+ :n 3500,
+ :bg "black",
+ :strokes
+ [{:color "#ff00ff", :opacity 0.5, :width 1.2}
+  {:color "#0000ff", :opacity 0.5, :width 1.2}
+  {:color "#ffa500", :opacity 0.5, :width 1.2}],
+ :res {:x 1600, :y 1200}}
