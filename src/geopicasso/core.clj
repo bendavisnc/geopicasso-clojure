@@ -1,13 +1,16 @@
 (ns geopicasso.core
-  (:require 
-    [common.math.helpers :refer [to-fixed]]
+  (:require
+    [common.math.helpers :as m]
     [geopicasso.config :as config]
-    [geopicasso.util.util :refer [map->ShapeModel, copy, svg, create-png!]]
+    [geopicasso.util.png :as png]
+    [geopicasso.svg-element :as svg-element]
+    [geopicasso.model.shapemodel :as shapemodel]
     [hiccup.core :as hiccup]
-    [clojure.java.io :refer [file]]
-    [geopicasso.settings :as settings])
-
-  (:gen-class))
+    [geopicasso.settings :refer [precision-amount]]
+    [geopicasso.settings :as settings]
+    [clojure.java.io :as io])
+  (:gen-class)
+  (:import (java.awt Desktop)))
 
 
 ;;
@@ -21,29 +24,29 @@
 (def first-and-last-shapes
   (memoize
     #(let [little-r (/ 0.5 (:n session-config))]
-      [(map->ShapeModel {:cx little-r, :cy 0.5, :r little-r}),
-       (map->ShapeModel {:cx 0.5, :cy 0.5, :r 0.5})])))
+      [(shapemodel/from-map {:cx little-r, :cy 0.5, :r little-r}),
+       (shapemodel/from-map {:cx 0.5, :cy 0.5, :r 0.5})])))
 
 (defn bigger-shape [first-shape, previous-shape]
   (let [bigger-r (* (+ (/ (:r previous-shape) (:r first-shape)) 1) (:r first-shape))]
-    (copy previous-shape {:cx bigger-r, :r bigger-r})))
+    (shapemodel/copy previous-shape {:cx bigger-r, :r bigger-r})))
 
 (defn right-of-shape [previous-shape]
-  (copy previous-shape {:cx (+ (:cx previous-shape) (* 2 (:r previous-shape)))}))
+  (shapemodel/copy previous-shape {:cx (+ (:cx previous-shape) (* 2 (:r previous-shape)))}))
 
 (defn right-of-shape?
   "Is shape sa to the right of shape sb?"
   [sa, sb]
   (>
-    (to-fixed (+ (:cx sa) (:r sa)), 4)
-    (to-fixed (+ (:cx sb) (:r sb)), 4)))
+    (m/to-fixed (+ (:cx sa) (:r sa)), precision-amount)
+    (m/to-fixed (+ (:cx sb) (:r sb)), precision-amount)))
 
 (defn bigger-shape?
   "Is shape sa bigger than shape sb?"
   [sa, sb]
   (>
-    (to-fixed (:r sa), 4)
-    (to-fixed (:r sb), 4)))
+    (m/to-fixed (:r sa), precision-amount)
+    (m/to-fixed (:r sb), precision-amount)))
 
 (defn next-shape [previous-shape]
   (let [[first-shape, last-shape] (first-and-last-shapes)
@@ -62,7 +65,7 @@
         x-transform (comp unit-to-projected-xscale config-unit-xmove config-unit-scale)
         y-transform (comp unit-to-projected-yscale config-unit-ymove config-unit-scale)
         r-transform (comp unit-to-projected-xscale config-unit-scale)]
-    (map->ShapeModel
+    (shapemodel/from-map
       (-> shape
         (update :cx x-transform)
         (update :cy y-transform)
@@ -106,7 +109,7 @@
     (reverse
       (map
         (fn [i, shape, fill-data, stroke-data, shape-ind]
-          (svg 
+          (svg-element/svg
             (str "element" i)
             (projected-shape shape),
             fill-data,
@@ -120,7 +123,16 @@
     svg-doc))
 
 (defn spit-png! [svg-doc]
-  (create-png! svg-doc (:id session-config)))
+  (png/create-png! svg-doc (:id session-config)))
+
+(defn spit-preview! [_]
+  (let [in-file
+        (->
+          (str "renders/" (:id session-config) ".png")
+          io/file)]
+    (->
+      (Desktop/getDesktop)
+      (.open in-file))))
 
 (defn create-svg-doc []
   (ready-svg-doc (ready-shapes)))
@@ -137,7 +149,8 @@
       (doto
         (create-svg-doc)
         (spit-png!)
-        (spit-svg!)))))
+        (spit-svg!)
+        (spit-preview!)))))
 
 
 

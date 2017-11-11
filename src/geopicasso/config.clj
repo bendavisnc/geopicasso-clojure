@@ -1,12 +1,10 @@
-(ns geopicasso.config
-  (:require [clojure.data.json :as json]))
+(ns geopicasso.config)
 
 ;;
 ;;
 ;; ns for generating a config that represents all of the input data needed to create a render.
 
-(defrecord Config [
-                   id,     ; the name of the file to be saved
+(defrecord Config [id,     ; the name of the file to be saved
                    cx,     ; the center x coordinate of the largest circle.
                    cy,     ; the center y coordinate of the largest circle.
                    r,      ; the radius of the largest circle.
@@ -41,18 +39,14 @@
 
 (defn from [path]
   "Given a path to a resources config edn file, return the corresponding config object."
-  (let [
-        dataset (get-edn-config-data path)
+  (let [dataset (get-edn-config-data path)
         id (first (clojure.string/split path #"\."))
-        [rx, ry] [
-                  (or
+        [rx, ry] [(or
                     (get-in dataset [:res :x])
                     (:x-res default-config))
                   (or
                     (get-in dataset [:res :y])
                     (:y-res default-config))]]
-
-
     (map->Config
       {
         :id id

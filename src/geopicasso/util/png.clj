@@ -1,23 +1,23 @@
 (ns geopicasso.util.png
   (:require
-    [common.math.helpers :refer [to-fixed]]
-    [hiccup.core :refer [html]]
-    [geopicasso.util.polygon :refer [points]]
     [geopicasso.settings :as settings]
-    [clojure.java.shell :as shell]))
+    [clojure.java.shell :as shell])
+  (:import (org.apache.batik.transcoder.image PNGTranscoder)
+           (org.apache.batik.transcoder TranscoderInput TranscoderOutput)
+           (java.io ByteArrayInputStream FileOutputStream)))
 
 
 (defmulti create-png! (fn [_ _] (if settings/use-rsvg :rsvg :batik)))
 
 (defmethod  create-png! :batik [svg-doc, docname]
   (let [png-converter
-        (org.apache.batik.transcoder.image.PNGTranscoder.)
+        (new PNGTranscoder)
         svg-input
-        (org.apache.batik.transcoder.TranscoderInput.
-          (java.io.ByteArrayInputStream. (.getBytes (str svg-doc))))
+        (new TranscoderInput
+          (new ByteArrayInputStream (.getBytes (str svg-doc))))
         svg-out-file
-        (java.io.FileOutputStream. (str "renders/" docname ".png"))
-        svg-out (org.apache.batik.transcoder.TranscoderOutput. svg-out-file)]
+        (new FileOutputStream (str "renders/" docname ".png"))
+        svg-out (new TranscoderOutput svg-out-file)]
     (do
       (.transcode png-converter svg-input svg-out)
       (.flush svg-out-file)
