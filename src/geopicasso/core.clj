@@ -7,11 +7,8 @@
     [geopicasso.model.shapemodel :as shapemodel]
     [hiccup.core :as hiccup]
     [geopicasso.settings :refer [precision-amount]]
-    [geopicasso.settings :as settings]
     [clojure.java.io :as io])
-  (:gen-class)
   (:import (java.awt Desktop)))
-
 
 ;;
 ;; 

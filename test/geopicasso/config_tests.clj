@@ -14,10 +14,8 @@
           0.8,
           4,
           "rgb(0, 0, 0)",
-          [
-           {:color "blue", :opacity 0.5},
-           {:color "red", :opacity 0.5}]
-          ,
+          [{:color "blue", :opacity 0.5},
+           {:color "red", :opacity 0.5}],
           [{:color "green", :opacity 1.0, :width 2.0}],
           [0],
           800,
@@ -27,7 +25,7 @@
     (is
       (=
         (config/from "superminimalist.edn")
-        (config/map->Config
+        (config/create
           (assoc
             config/default-config
             :id "superminimalist"))))))

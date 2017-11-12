@@ -1,4 +1,5 @@
-(ns geopicasso.config)
+(ns geopicasso.config
+  (:require [clojure.java.io :as io]))
 
 ;;
 ;;
@@ -16,30 +17,26 @@
                    x-res,  ; the width in pixels of the render.
                    y-res]) ; the height in pixels of the render.
 
+(defn create [m]
+  (map->Config m))
+
 (def default-config
-  (map->Config
-    {
-      :id "default",
-      :cx 0.5,
-      :cy 0.5,
-      :r 0.4,
-      :n 1000,
-      :bg "rgb(0, 0, 0)",
-      :fills [{:color "black", :opacity 0.0}],
-      :strokes [{:color "black", :opacity 1.0, :width 1.0}],
-      :shapes [0],
-      :x-res 1600,
-      :y-res 1200}))
-
-
-(defn get-edn-config-data[path]
-  (read-string
-    (slurp 
-      (clojure.java.io/resource path))))
+  (create
+    {:id "default",
+     :cx 0.5,
+     :cy 0.5,
+     :r 0.4,
+     :n 1000,
+     :bg "rgb(0, 0, 0)",
+     :fills [{:color "black", :opacity 0.0}],
+     :strokes [{:color "black", :opacity 1.0, :width 1.0}],
+     :shapes [0],
+     :x-res 1600,
+     :y-res 1200}))
 
 (defn from [path]
   "Given a path to a resources config edn file, return the corresponding config object."
-  (let [dataset (get-edn-config-data path)
+  (let [dataset (-> path io/resource slurp read-string)
         id (first (clojure.string/split path #"\."))
         [rx, ry] [(or
                     (get-in dataset [:res :x])
@@ -47,17 +44,15 @@
                   (or
                     (get-in dataset [:res :y])
                     (:y-res default-config))]]
-    (map->Config
-      {
-        :id id
-        :cx (some :cx [dataset default-config])
-        :cy (some :cy [dataset default-config])
-        :r (some :r [dataset default-config])
-        :n (some :n [dataset default-config])
-        :bg (some :bg [dataset default-config])
-        :fills (some :fills [dataset default-config])
-        :strokes (some :strokes [dataset default-config])
-        :shapes (some :shapes [dataset default-config])
-        :x-res rx,
-        :y-res ry})))
-
+    (create
+      {:id id
+       :cx (some :cx [dataset default-config])
+       :cy (some :cy [dataset default-config])
+       :r (some :r [dataset default-config])
+       :n (some :n [dataset default-config])
+       :bg (some :bg [dataset default-config])
+       :fills (some :fills [dataset default-config])
+       :strokes (some :strokes [dataset default-config])
+       :shapes (some :shapes [dataset default-config])
+       :x-res rx,
+       :y-res ry})))
