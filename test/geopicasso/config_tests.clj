@@ -6,7 +6,7 @@
   (testing "minimalist"
     (is
       (=
-        (config/from "minimalist.edn")
+        (config/from-resource "minimalist.edn")
         (config/->Config
           "minimalist",
           0.5,
@@ -24,7 +24,7 @@
   (testing "superminimalist"
     (is
       (=
-        (config/from "superminimalist.edn")
+        (config/from-resource "superminimalist.edn")
         (config/create
           (assoc
             config/default-config

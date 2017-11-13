@@ -7,10 +7,10 @@
                  ;[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojure "1.9.0-RC1"]
                  [org.clojure/test.check "0.9.0"]
-                 ;[com.velisco/strgen "0.1.4"]
+                 [com.velisco/strgen "0.1.4"]
                  [org.clojure/data.json "0.2.6"]
                  [hiccup "1.0.5"]
-                 [crumpets "0.1.4"]
+                 ;[crumpets "0.1.4"]
                  [org.apache.xmlgraphics/batik-transcoder "1.7"]
                  [org.apache.xmlgraphics/batik-codec "1.7"]]
 

@@ -1,5 +1,7 @@
 (ns geopicasso.config
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [clojure.spec.alpha :as s]
+            [geopicasso.specs.config :as config-specs]))
 
 ;;
 ;;
@@ -18,7 +20,7 @@
                    y-res]) ; the height in pixels of the render.
 
 (defn create [m]
-  (map->Config m))
+  (map->Config (s/conform config-specs/config-spec m)))
 
 (def default-config
   (create
@@ -34,7 +36,7 @@
      :x-res 1600,
      :y-res 1200}))
 
-(defn from [path]
+(defn from-resource [path]
   "Given a path to a resources config edn file, return the corresponding config object."
   (let [dataset (-> path io/resource slurp read-string)
         id (first (clojure.string/split path #"\."))
@@ -56,3 +58,8 @@
        :shapes (some :shapes [dataset default-config])
        :x-res rx,
        :y-res ry})))
+
+(defn from-nothing []
+  (create (config-specs/generate-config)))
+
+

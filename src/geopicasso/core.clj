@@ -142,12 +142,17 @@
 (defn -main
   [& args]
   (time
-    (with-session-config (config/from (first args))
-      (doto
-        (create-svg-doc)
-        (spit-png!)
-        (spit-svg!)
-        (spit-preview!)))))
+    (let [config-to-use
+          (if-let [p (first args)]
+            (config/from-resource p)
+            ;else
+            (config/from-nothing))]
+      (with-session-config config-to-use
+        (doto
+          (create-svg-doc)
+          (spit-png!)
+          (spit-svg!)
+          (spit-preview!))))))
 
 
 
