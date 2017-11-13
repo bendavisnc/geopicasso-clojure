@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
             [clojure.spec.test.alpha :as stest]
-            [geopicasso.specs.helpers :refer [color-spec]]))
+            [geopicasso.specs.helpers :refer [color-spec, fill-item-spec]]))
 
 ;(defrecord Config [id,     ; the name of the file to be saved
 ;                   cx,     ; the center x coordinate of the largest circle.
@@ -35,7 +35,11 @@
 ; The background color of the render.
 (s/def ::bg color-spec)
 
-(s/def ::config (s/keys :req-un [::id ::cx ::cy ::r ::n ::bg]))
+; The fills to alternate with each circle drawn.
+(s/def ::fills (s/coll-of fill-item-spec :kind vector? :min-count 0 :max-count 100))
+
+(s/def ::config (s/keys :req-un [::id ::cx ::cy ::r ::n ::bg ::fills]))
+;(s/def ::config (s/keys :req-un [::id ::cx ::cy ::r ::n]))
 
 (defn create-sample []
   (gen/generate (s/gen ::config)))
