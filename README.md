@@ -5,13 +5,13 @@
 
 ## Example usage:
 
-####(from resource file)
+#### (from resource file)
 ```
 lein run <resourcefilename>
 eg: "lein run lady.edn"
 ```
 
-####(from spec generation)
+#### (from spec generation)
 ```
 lein run
 ```
