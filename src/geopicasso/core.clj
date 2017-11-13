@@ -91,6 +91,7 @@
   (hiccup/html
     [:svg
       {:xmlns "http://www.w3.org/2000/svg"
+       :config-used (into {} session-config)
        :width (:x-res session-config)
        :height (:y-res session-config)}
       [:rect
@@ -153,8 +154,4 @@
           (spit-png!)
           (spit-svg!)
           (spit-preview!))))))
-
-
-
-
 

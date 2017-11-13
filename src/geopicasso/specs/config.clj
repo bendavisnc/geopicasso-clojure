@@ -15,13 +15,24 @@
     #(gen/return (str "spec_generated_" (rand-int 1000)))))
 
 ; The center x coordinate of the largest circle.
-(s/def ::cx (s/and double? pos? #(< % 1000)))
+(s/def ::cx
+  (s/with-gen
+    (s/and double? #(< % 1000) #(> % -1000))
+    #(gen/return 0.5))) ; todo = make smarter
+    ;#(gen/return (rand-nth (range -1 1 0.1)))))
 
 ; The center y coordinate of the largest circle.
-(s/def ::cy (s/and double? pos? #(< % 1000)))
+(s/def ::cy
+  (s/with-gen
+    (s/and double? #(< % 1000) #(> % -1000))
+    #(gen/return 0.5))) ; todo = make smarter
+    ;#(gen/return (rand-nth (range -1 1 0.1)))))
 
 ; The  radius of the largest circle.
-(s/def ::r (s/and double? pos? #(< % 1000)))
+(s/def ::r
+  (s/with-gen
+    (s/and double? #(< % 1000) #(> % -1000))
+    #(gen/return (rand-nth (range -5 5 0.1)))))
 
 ; The number of circles drawn along the largest circle's diameter.
 (s/def ::n (s/and int? pos? #(< % 10000)))
